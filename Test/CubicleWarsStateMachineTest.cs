@@ -26,23 +26,23 @@ namespace CubicleWarsLibrary
 		}
 		
 		[Test]
-		public void ItAssignsTheSelectedObjectToThePlayerOnSelectObject()
+		public void ItAssignsTheSelectedObjectToThePlayerOnSelect()
 		{
 			var unit = Substitute.For<Unit>();
 			playerOne.Owns(unit).Returns(true);
 			
-			stateMachine.SelectObject(unit);
+			stateMachine.Select(unit);
 			
 			playerOne.Received().SetWeapon(unit);
 		}
 
 		[Test]
-		public void ItDoesNotAssignTheUnitIfTheSelectedUnitIsNotEligible()
+		public void ItDoesNotAssignTheUnitToThePlayerIfTheSelectedUnitIsNotEligible()
 		{
 			var unit = Substitute.For<Unit>();
 			playerOne.Owns(unit).Returns(false);
 
-			stateMachine.SelectObject(unit);
+			stateMachine.Select(unit);
 
 			playerOne.DidNotReceive().SetWeapon(unit);
 		}
@@ -57,14 +57,14 @@ namespace CubicleWarsLibrary
 			playerOne.Weapon().Returns(unit);
 			playerOne.Owns(enemyUnit).Returns(false);
 
-			stateMachine.SelectObject(unit);
-			stateMachine.Attack(enemyUnit);
+			stateMachine.Select(unit);
+			stateMachine.Select(enemyUnit);
 
 			enemyUnit.Received().AttackWith(unit);
 		}
 
 		[Test]
-		public void ItDoesNotAllowAttackWithoutSelecting()
+		public void ItDoesNotAttackWithoutSelecting()
 		{
 			var unit = Substitute.For<Unit>();
 			var enemyUnit = Substitute.For<Unit>();
@@ -72,7 +72,7 @@ namespace CubicleWarsLibrary
 			playerOne.Weapon().Returns(unit);
 			playerOne.Owns(enemyUnit).Returns(false);
 			
-			stateMachine.Attack(enemyUnit);
+			stateMachine.Select(enemyUnit);
 			
 			enemyUnit.DidNotReceive().AttackWith(unit);
 		}
@@ -86,8 +86,8 @@ namespace CubicleWarsLibrary
 			playerOne.Owns(unit).Returns(true);
 			playerOne.Owns(secondUnit).Returns(true);
 			
-			stateMachine.SelectObject(unit);
-			stateMachine.SelectObject(secondUnit);
+			stateMachine.Select(unit);
+			stateMachine.Select(secondUnit);
 
 			playerOne.Received().SetWeapon(secondUnit);
 		}
@@ -101,9 +101,9 @@ namespace CubicleWarsLibrary
 			playerOne.Owns(unit).Returns(true);
 			playerTwo.Owns(enemyUnit).Returns(true);
 			
-			stateMachine.SelectObject(unit);
-			stateMachine.Attack(enemyUnit);
-			stateMachine.SelectObject(enemyUnit);
+			stateMachine.Select(unit);
+			stateMachine.Select(enemyUnit);
+			stateMachine.Select(enemyUnit);
 			
 			playerTwo.Received().SetWeapon(enemyUnit);
 		}
@@ -118,17 +118,12 @@ namespace CubicleWarsLibrary
 			playerTwo.Owns(enemyUnit).Returns(true);
 			playerTwo.Weapon().Returns (enemyUnit);
 			
-			stateMachine.SelectObject(unit);
-			stateMachine.Attack(enemyUnit);
-			stateMachine.Attack(unit);
+			stateMachine.Select(unit);
+			stateMachine.Select(enemyUnit);
+			stateMachine.Select(unit);
 
 			unit.DidNotReceive().AttackWith(enemyUnit);
 		}
-		// Implementing these objects
-		// See attacks in game
-		// Enemies can die
-		// Game Over
-
 	}
 }
 

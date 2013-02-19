@@ -29,23 +29,22 @@ namespace CubicleWarsLibrary
 		}
 
 		// Probably could be a weapon, not a unit
-		public void SelectObject(Unit unit)
+		public void Select (Unit unit)
 		{
-			if (CurrentPlayer.Owns(unit))
-			{
-				CurrentPlayer.SetWeapon(unit);
+			if (CurrentPlayer.Owns (unit)) {
+				CurrentPlayer.SetWeapon (unit);
 				CurrentState = State.Attacking;
+			} else if (CurrentState == State.Attacking) {
+				Attack (unit);
 			}
+
 		}
 
-		public void Attack(Unit unit)
+		private void Attack(Unit unit)
 		{
-			if (CurrentState == State.Attacking)
-			{
-				unit.AttackWith(CurrentPlayer.Weapon());
-				players.Reverse();
-				CurrentState = State.Selecting;
-			}
+			unit.AttackWith(CurrentPlayer.Weapon());
+			players.Reverse();
+			CurrentState = State.Selecting;
 		}
 	}
 }
