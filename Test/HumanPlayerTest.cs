@@ -13,7 +13,7 @@ namespace CubicleWarsLibrary
 		{
 			var unit = Substitute.For<Unit>();
 
-			var player = new HumanPlayer(new ArrayList {unit});
+			var player = new HumanPlayer(new Unit[] {unit});
 
 			Assert.IsTrue (player.Owns(unit));
 		}
@@ -23,7 +23,7 @@ namespace CubicleWarsLibrary
 		{
 			var unit = Substitute.For<Unit>();
 			
-			var player = new HumanPlayer(new ArrayList {unit});
+			var player = new HumanPlayer(new Unit[] {unit});
 			player.SetWeapon(unit);
 
 			Assert.AreEqual(unit, player.Weapon());

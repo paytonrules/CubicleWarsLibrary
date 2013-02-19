@@ -1,16 +1,17 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace CubicleWarsLibrary
 {
 	public class HumanPlayer : Player
 	{
-		ArrayList units;
+		List<Unit> units;
 		Unit currentWeapon;
 
-		public HumanPlayer(ArrayList units)
+		public HumanPlayer(IEnumerable<Unit> units)
 		{
-			this.units = units;
+			this.units = new List<Unit>(units);
 		}
 
 		public void SetWeapon(Unit unit)

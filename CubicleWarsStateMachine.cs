@@ -27,7 +27,8 @@ namespace CubicleWarsLibrary
 
 			CurrentState = State.Selecting;
 		}
-		
+
+		// Probably could be a weapon, not a unit
 		public void SelectObject(Unit unit)
 		{
 			if (CurrentPlayer.Owns(unit))
