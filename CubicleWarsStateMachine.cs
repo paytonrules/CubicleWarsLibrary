@@ -6,24 +6,25 @@ namespace CubicleWarsLibrary
 {
 	public class CubicleWarsStateMachine
 	{
-		protected enum State {
+		public enum State {
 			Selecting,
-			Attacking
+			Attacking,
+			PlayerWins
 		};
 
-		protected State CurrentState { get; set; }
-		protected ArrayList players;
+		public State CurrentState { get; protected set; }
+		protected List<Player> players;
 		public Player CurrentPlayer 
 		{
 			get 
 			{ 
-				return (Player) players[0]; 
+				return players[0]; 
 			}
 		}
 
 		public CubicleWarsStateMachine(Player playerOne, Player playerTwo)
 		{
-			players = new ArrayList {playerOne, playerTwo};
+			players = new List<Player> {playerOne, playerTwo};
 
 			CurrentState = State.Selecting;
 		}
@@ -37,14 +38,18 @@ namespace CubicleWarsLibrary
 			} else if (CurrentState == State.Attacking) {
 				Attack (unit);
 			}
-
 		}
 
 		private void Attack(Unit unit)
 		{
 			unit.AttackWith(CurrentPlayer.Weapon());
+			
+			if (players[1].LivingUnits() == 0)
+				CurrentState = State.PlayerWins;
+			else 
+				CurrentState = State.Selecting;
+
 			players.Reverse();
-			CurrentState = State.Selecting;
 		}
 	}
 }

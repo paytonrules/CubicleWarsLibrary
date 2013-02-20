@@ -7,6 +7,7 @@ namespace CubicleWarsLibrary
 		void SetWeapon(Unit unit);
 		bool Owns(Unit unit);
 		Unit Weapon();
+		int LivingUnits();
 	}
 }
 

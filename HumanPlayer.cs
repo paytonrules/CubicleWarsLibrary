@@ -28,5 +28,10 @@ namespace CubicleWarsLibrary
 		{
 			return currentWeapon;
 		}
+
+		public int LivingUnits()
+		{
+			return 1;
+		}
 	}
 }

@@ -124,6 +124,27 @@ namespace CubicleWarsLibrary
 
 			unit.DidNotReceive().AttackWith(enemyUnit);
 		}
+
+		[Test]
+		public void AfterAnAttackPlayerOneCanWin()
+		{
+			var unit = Substitute.For<Unit>();
+			var enemyUnit = Substitute.For<Unit>();
+			playerOne.Owns(unit).Returns(true);
+			playerTwo.Owns(enemyUnit).Returns(true);
+			playerTwo.LivingUnits().Returns(0);
+
+			stateMachine.Select(unit);
+			stateMachine.Select(enemyUnit);
+
+			Assert.AreEqual(CubicleWarsStateMachine.State.PlayerWins, stateMachine.CurrentState);
+		}
+
+		// Game needs to end at the end of the battle
+		// ends when everybody on one team has a health of zero
+		// So let's start doing health
+		// Health and attacks on each item.  
+		// Wonder how you'll skip a turn
 	}
 }
 
