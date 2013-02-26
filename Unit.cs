@@ -5,6 +5,7 @@ namespace CubicleWarsLibrary
 	public interface Unit
 	{
 		void AttackWith(Unit enemy);
+		bool Alive();
 	}
 }
 

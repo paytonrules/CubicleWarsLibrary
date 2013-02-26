@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace CubicleWarsLibrary
 {
 	public class HumanPlayer : Player
 	{
-		List<Unit> units;
+		IList<Unit> units;
 		Unit currentWeapon;
 
-		public HumanPlayer(IEnumerable<Unit> units)
+		public HumanPlayer(IList<Unit> units)
 		{
 			this.units = new List<Unit>(units);
 		}
@@ -29,9 +30,9 @@ namespace CubicleWarsLibrary
 			return currentWeapon;
 		}
 
-		public int LivingUnits()
+		public int LivingUnits ()
 		{
-			return 1;
+			return units.Count(unit => unit.Alive());
 		}
 	}
 }

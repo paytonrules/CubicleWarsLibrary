@@ -19,6 +19,11 @@ namespace CubicleWarsLibrary
 			Health -= 1;
 			Unity.Attacked();
 		}
+
+		public bool Alive()
+		{
+			return true;
+		}
 	}
 }
 

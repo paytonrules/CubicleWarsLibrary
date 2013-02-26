@@ -12,6 +12,11 @@ namespace CubicleWarsLibrary
 		public void AttackWith(Unit enemy)
 		{
 		}
+
+		public bool Alive()
+		{
+			return true;
+		}
 	}
 }
 
