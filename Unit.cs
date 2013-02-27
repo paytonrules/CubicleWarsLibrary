@@ -6,6 +6,7 @@ namespace CubicleWarsLibrary
 	{
 		void AttackWith(Unit enemy);
 		bool Alive();
+		int AttackStrengthAgainst(Unit enemy);
 	}
 }
 

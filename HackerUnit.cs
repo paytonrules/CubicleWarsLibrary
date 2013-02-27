@@ -24,6 +24,11 @@ namespace CubicleWarsLibrary
 		{
 			return true;
 		}
+
+		public int AttackStrengthAgainst(Unit unit) 
+		{
+			return 0;
+		}
 	}
 }
 
