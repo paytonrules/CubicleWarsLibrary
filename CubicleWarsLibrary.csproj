@@ -42,7 +42,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyClass.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="CubicleWarsStateMachine.cs" />
@@ -51,11 +50,9 @@
     <Compile Include="HumanPlayer.cs" />
     <Compile Include="UnityObject.cs" />
     <Compile Include="Test\HumanPlayerTest.cs" />
-    <Compile Include="Test\HackerUnitTest.cs" />
-    <Compile Include="HackerUnit.cs" />
-    <Compile Include="Test\CellPhoneUnitTest.cs" />
-    <Compile Include="CellPhoneUnit.cs" />
-    <Compile Include="DroneUnit.cs" />
+    <Compile Include="ConflictResolver.cs" />
+    <Compile Include="StandardUnit.cs" />
+    <Compile Include="Test\StandardUnitTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
