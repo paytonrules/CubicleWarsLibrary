@@ -5,6 +5,8 @@ namespace CubicleWarsLibrary
 	public class StandardUnit : Unit
 	{
 		public int Health { get; set; }
+		public string UnitName { get; set; }
+
 		protected ConflictResolver Resolver { get; set; }
 		protected UnityObject Unity { get; set; }
 

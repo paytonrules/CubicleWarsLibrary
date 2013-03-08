@@ -10,7 +10,7 @@ namespace CubicleWarsLibrary
 		IList<Unit> units;
 		Unit currentWeapon;
 
-		public HumanPlayer(IList<Unit> units)
+		public HumanPlayer(IEnumerable<Unit> units)
 		{
 			this.units = new List<Unit>(units);
 		}

@@ -53,6 +53,8 @@
     <Compile Include="ConflictResolver.cs" />
     <Compile Include="StandardUnit.cs" />
     <Compile Include="Test\StandardUnitTest.cs" />
+    <Compile Include="Test\RockPaperScissorsConflictResolverTest.cs" />
+    <Compile Include="RockPaperScissorsConflictResolver.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

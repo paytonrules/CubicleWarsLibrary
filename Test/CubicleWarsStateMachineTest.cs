@@ -139,12 +139,6 @@ namespace CubicleWarsLibrary
 
 			Assert.AreEqual(CubicleWarsStateMachine.State.PlayerWins, stateMachine.CurrentState);
 		}
-
-		// Game needs to end at the end of the battle
-		// ends when everybody on one team has a health of zero
-		// So let's start doing health
-		// Health and attacks on each item.  
-		// Wonder how you'll skip a turn
 	}
 }
 
