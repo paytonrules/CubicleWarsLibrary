@@ -14,7 +14,10 @@ namespace CubicleWarsLibrary
 
 		public int Resolve(Unit attacker, Unit defender)
 		{
-			return ConflictTable[attacker.UnitName][defender.UnitName];
+			if (ConflictTable[attacker.UnitName].ContainsKey(defender.UnitName))
+				return ConflictTable[attacker.UnitName][defender.UnitName];
+			else
+				return 0;
 		}
 	}
 }
