@@ -33,7 +33,7 @@ namespace CubicleWarsLibrary
 		public void Select (Unit unit)
 		{
 			if (CurrentPlayer.Owns (unit)) {
-				CurrentPlayer.SetWeapon (unit);
+				CurrentPlayer.SetWeapon(unit);
 				CurrentState = State.Attacking;
 			} else if (CurrentState == State.Attacking) {
 				Attack (unit);

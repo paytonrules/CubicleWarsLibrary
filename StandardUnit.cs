@@ -32,22 +32,7 @@ namespace CubicleWarsLibrary
 		public int AttackStrengthAgainst(Unit enemy)
 		{
 			return Resolver.Resolve(enemy, this);
-			/*
-			var lookupTable = new Dictionary<Type, Dictionary<Type, int>>();
-
-			lookupTable[typeof(CellPhoneUnit)] = new Dictionary<Type, int>();
-			lookupTable[typeof(CellPhoneUnit)][typeof(DroneUnit)] = 1;
-			lookupTable[typeof(CellPhoneUnit)][typeof(HackerUnit)] = 0;
-
-			return lookupTable[this.GetType()][enemy.GetType()];*/
-			/*if (enemy is DroneUnit) {
-				return 1;
-			}
-
-			return 0;*/
 		}
-		// One basic unit they all use
-		// Write the conflict resolver
 	}
 }
 
