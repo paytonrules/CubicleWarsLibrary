@@ -100,6 +100,7 @@ namespace CubicleWarsLibrary
 			
 			playerOne.Owns(unit).Returns(true);
 			playerTwo.Owns(enemyUnit).Returns(true);
+			playerTwo.LivingUnits().Returns(3);
 			
 			stateMachine.Select(unit);
 			stateMachine.Select(enemyUnit);
@@ -117,6 +118,7 @@ namespace CubicleWarsLibrary
 			playerOne.Owns(unit).Returns(true);
 			playerTwo.Owns(enemyUnit).Returns(true);
 			playerTwo.Weapon().Returns (enemyUnit);
+			playerTwo.LivingUnits().Returns (3);
 			
 			stateMachine.Select(unit);
 			stateMachine.Select(enemyUnit);

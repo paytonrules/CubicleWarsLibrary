@@ -1,19 +1,38 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Stateless;
 
 namespace CubicleWarsLibrary
 {
 	public class CubicleWarsStateMachine
 	{
 		public enum State {
+			WaitingForSelection,
 			Selecting,
 			Attacking,
-			PlayerWins
+			PlayerWins,
+			ResolvingAttack
 		};
 
-		public State CurrentState { get; protected set; }
+		public enum Trigger {
+			ClickWeapon,
+			AssignWeapon,
+			PlayerDead,
+			NextTurn,
+			InvalidSelection
+		};
+		// Need this?
+		public State CurrentState 
+		{ 
+			get
+			{
+				return machine.State;
+			}
+		}
+
 		protected List<Player> players;
+		// Need this?
 		public Player CurrentPlayer 
 		{
 			get 
@@ -22,34 +41,75 @@ namespace CubicleWarsLibrary
 			}
 		}
 
+		protected StateMachine<State, Trigger> machine;
+		protected StateMachine<State, Trigger>.TriggerWithParameters<Unit> clickWeapon;
+
 		public CubicleWarsStateMachine(Player playerOne, Player playerTwo)
 		{
 			players = new List<Player> {playerOne, playerTwo};
 
-			CurrentState = State.Selecting;
+			machine = new StateMachine<State, Trigger>(State.WaitingForSelection);
+			clickWeapon = machine.SetTriggerParameters<Unit>(Trigger.ClickWeapon);
+
+			machine.Configure(State.WaitingForSelection)
+				.Permit(Trigger.ClickWeapon, State.Selecting);
+
+			machine.Configure(State.Selecting)
+				.OnEntryFrom(clickWeapon, unit => TryToSelectWeapon(unit))
+				.Permit(Trigger.AssignWeapon, State.Attacking)
+				.Permit(Trigger.InvalidSelection, State.WaitingForSelection);
+
+			machine.Configure (State.Attacking)
+				.Permit(Trigger.ClickWeapon, State.ResolvingAttack);
+
+			machine.Configure (State.ResolvingAttack)
+				.OnEntryFrom(clickWeapon, unit => ResolveAttack(unit))
+				.Permit (Trigger.PlayerDead, State.PlayerWins)
+				.Permit (Trigger.NextTurn, State.WaitingForSelection)
+				.Permit (Trigger.AssignWeapon, State.Attacking)
+				.OnExit(() => SwitchPlayers());
 		}
 
 		// Probably could be a weapon, not a unit
 		public void Select (Unit unit)
 		{
-			if (CurrentPlayer.Owns (unit)) {
-				CurrentPlayer.SetWeapon(unit);
-				CurrentState = State.Attacking;
-			} else if (CurrentState == State.Attacking) {
-				Attack (unit);
+			machine.Fire(clickWeapon, unit);
+		}
+
+		private void TryToSelectWeapon(Unit weapon)
+		{
+			if (CurrentPlayer.Owns(weapon))
+			{
+				CurrentPlayer.SetWeapon(weapon);
+				machine.Fire(Trigger.AssignWeapon);
+			}
+			else
+			{
+				machine.Fire(Trigger.InvalidSelection);
 			}
 		}
 
-		private void Attack(Unit unit)
+		private void SwitchPlayers()
 		{
-			unit.AttackWith(CurrentPlayer.Weapon());
-			
-			if (players[1].LivingUnits() == 0)
-				CurrentState = State.PlayerWins;
-			else 
-				CurrentState = State.Selecting;
-
 			players.Reverse();
+		}
+
+		private void ResolveAttack(Unit enemy)
+		{
+			if (CurrentPlayer.Owns (enemy) )
+			{
+				CurrentPlayer.SetWeapon(enemy);
+				machine.Fire (Trigger.AssignWeapon);
+			}
+			else
+			{
+				enemy.AttackWith(CurrentPlayer.Weapon());
+				
+				if (players[1].LivingUnits() == 0)
+					machine.Fire (Trigger.PlayerDead);
+				else 
+					machine.Fire (Trigger.NextTurn);
+			}
 		}
 	}
 }
