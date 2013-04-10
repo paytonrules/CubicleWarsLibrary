@@ -139,7 +139,21 @@ namespace CubicleWarsLibrary
 			stateMachine.Select(unit);
 			stateMachine.Select(enemyUnit);
 
-			Assert.AreEqual(CubicleWarsStateMachine.State.PlayerWins, stateMachine.CurrentState);
+			Assert.AreEqual(State.PlayerWins, stateMachine.CurrentState);
+		}
+
+		[Test]
+		public void ItNotifiesOnTheStateChangeForSelecting()
+		{
+			object stateChanged = null;
+			var unit = Substitute.For<Unit>();
+			playerOne.Owns(unit).Returns(true);
+
+			stateMachine.StateChanged += (s, e) => stateChanged = s;
+
+			stateMachine.Select(unit);
+
+			Assert.IsNotNull(stateChanged);
 		}
 	}
 }

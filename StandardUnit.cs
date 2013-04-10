@@ -2,25 +2,27 @@ using System;
 
 namespace CubicleWarsLibrary
 {
+	public delegate void AttackedEvent();
+
 	public class StandardUnit : Unit
 	{
-		public int Health { get; set; }
-		public string UnitName { get; set; }
-
+		public int Health { get; protected set; }
+		public string UnitName { get; set; } 
+		public event AttackedEvent Attacked;
+		public event WaitingEvent Waiting;
 		protected ConflictResolver Resolver { get; set; }
-		protected UnityObject Unity { get; set; }
 
 		public StandardUnit(ConflictResolver resolver, UnityObject unity)
 		{
 			Resolver = resolver;
-			Unity = unity;
+			Health = unity.Health;
 		}
 
 		public void AttackWith (Unit enemy)
 		{
 			Health -= enemy.AttackStrengthAgainst (this);
-			if (Unity != null) {
-				Unity.Attacked ();
+			if (Attacked != null) {
+				Attacked();
 			}
 		}
 
@@ -32,6 +34,15 @@ namespace CubicleWarsLibrary
 		public int AttackStrengthAgainst(Unit enemy)
 		{
 			return Resolver.Resolve(enemy, this);
+		}
+
+		public void Observe(StateMachine stateMachine)
+		{
+			stateMachine.StateChanged += delegate(object sender, EventArgs e) {
+				if (Waiting != null && stateMachine.CurrentPlayer.Owns (this)) {
+					Waiting();
+				}
+			};
 		}
 	}
 }

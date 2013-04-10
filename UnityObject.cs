@@ -4,7 +4,7 @@ namespace CubicleWarsLibrary
 {
 	public interface UnityObject
 	{
-		void Attacked();
+		int Health { get; }
 	}
 }
 

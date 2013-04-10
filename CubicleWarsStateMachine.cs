@@ -5,24 +5,8 @@ using Stateless;
 
 namespace CubicleWarsLibrary
 {
-	public class CubicleWarsStateMachine
+	public class CubicleWarsStateMachine : StateMachine
 	{
-		public enum State {
-			WaitingForSelection,
-			Selecting,
-			Attacking,
-			PlayerWins,
-			ResolvingAttack
-		};
-
-		public enum Trigger {
-			ClickWeapon,
-			AssignWeapon,
-			PlayerDead,
-			NextTurn,
-			InvalidSelection
-		};
-		// Need this?
 		public State CurrentState 
 		{ 
 			get
@@ -31,8 +15,6 @@ namespace CubicleWarsLibrary
 			}
 		}
 
-		protected List<Player> players;
-		// Need this?
 		public Player CurrentPlayer 
 		{
 			get 
@@ -40,9 +22,11 @@ namespace CubicleWarsLibrary
 				return players[0]; 
 			}
 		}
+		public event StateChangedEventHandler StateChanged;
 
 		protected StateMachine<State, Trigger> machine;
 		protected StateMachine<State, Trigger>.TriggerWithParameters<Unit> clickWeapon;
+		protected List<Player> players;
 
 		public CubicleWarsStateMachine(Player playerOne, Player playerTwo)
 		{
@@ -74,6 +58,8 @@ namespace CubicleWarsLibrary
 		public void Select (Unit unit)
 		{
 			machine.Fire(clickWeapon, unit);
+			if (StateChanged != null)
+				StateChanged(this, new EventArgs());
 		}
 
 		private void TryToSelectWeapon(Unit weapon)
