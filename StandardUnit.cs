@@ -39,7 +39,9 @@ namespace CubicleWarsLibrary
 		public void Observe(StateMachine stateMachine)
 		{
 			stateMachine.StateChanged += delegate(object sender, EventArgs e) {
-				if (Waiting != null && stateMachine.CurrentPlayer.Owns (this)) {
+				if (Waiting != null 
+				    && stateMachine.CurrentPlayer.Owns (this)
+				    && stateMachine.CurrentState == State.WaitingForSelection) {
 					Waiting();
 				}
 			};

@@ -75,58 +75,61 @@ namespace CubicleWarsLibrary
 			Assert.IsTrue(attacked);
 		}
 
-
 		class FakeStateMachine : StateMachine {
 			public event StateChangedEventHandler StateChanged;
 			public State CurrentState { get; set; }
 			public Player CurrentPlayer { get; set; }
-
+			
 			public void FireStateMachine(Player player) {
 			}
-
+			
 			public void FireStateChange() {
 				StateChanged(this, EventArgs.Empty);
 			}
 		}
 
-		[Test]
-		public void ItFiresAWaitingEventIfTheCurrentStateIsWaitingForSelectionAndTheCurrentPlayerOwnsThisUnit()
-		{
+		protected delegate void WaitingFiredDelegate(bool waiting);
+
+		protected void FiringAStateChangeWith(State currentState, bool isOwned, WaitingFiredDelegate callback) {
 			var unity = Substitute.For<UnityObject>();
 			var conflictResolver = Substitute.For<ConflictResolver>();
 			var unit = new StandardUnit(conflictResolver, unity);
 			var player = Substitute.For<Player>();
-			player.Owns (unit).Returns (true);
-
-			var stateMachine = new FakeStateMachine() { CurrentPlayer = player };
+			player.Owns (unit).Returns(isOwned);
+			
+			var stateMachine = new FakeStateMachine() { CurrentState = currentState, CurrentPlayer = player };
 			unit.Observe(stateMachine);
-
+			
 			bool waiting = false;
 			unit.Waiting += () => waiting = true;
-
+			
 			stateMachine.FireStateChange();
 
-			Assert.IsTrue (waiting);
+			callback(waiting);
+		}
+
+		[Test]
+		public void ItFiresAWaitingEventIfTheCurrentStateIsWaitingForSelectionAndTheCurrentPlayerOwnsThisUnit()
+		{
+			FiringAStateChangeWith(State.WaitingForSelection, true, delegate(bool waiting) {
+				Assert.IsTrue (waiting);
+			});
 		}
 
 		[Test]
 		public void ItDoesNotFireAWaitingEventIfTheCurrentStateIsWaitingForSelectionAndTheCurrentPlayerDoesntOwnThisUnit()
 		{
-			var unity = Substitute.For<UnityObject>();
-			var conflictResolver = Substitute.For<ConflictResolver>();
-			var unit = new StandardUnit(conflictResolver, unity);
-			var player = Substitute.For<Player>();
-			player.Owns (unit).Returns (false);
-			
-			var stateMachine = new FakeStateMachine() { CurrentPlayer = player };
-			unit.Observe(stateMachine);
-			
-			bool waiting = false;
-			unit.Waiting += () => waiting = true;
-			
-			stateMachine.FireStateChange();
-			
-			Assert.IsFalse (waiting);
+			FiringAStateChangeWith(State.WaitingForSelection, false, delegate(bool waiting) {
+				Assert.IsFalse (waiting);
+			});
+		}
+
+		[Test]
+		public void ItDoesNotFireAWaitingEventIfTheCurrentStateIsNotWaitingForSelection() 
+		{
+			FiringAStateChangeWith(State.ResolvingAttack, true, delegate(bool waiting) {
+				Assert.IsFalse (waiting);
+			});
 		}
 	}
 }
