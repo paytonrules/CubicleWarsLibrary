@@ -90,7 +90,7 @@ namespace CubicleWarsLibrary
 
 		protected delegate void WaitingFiredDelegate(bool waiting);
 
-		protected void FiringAStateChangeWith(State currentState, bool isOwned, WaitingFiredDelegate callback) {
+		protected void SelectAUnitAndCheckWaitingEvent(State currentState, bool isOwned, WaitingFiredDelegate callback) {
 			var unity = Substitute.For<UnityObject>();
 			var conflictResolver = Substitute.For<ConflictResolver>();
 			var unit = new StandardUnit(conflictResolver, unity);
@@ -108,10 +108,28 @@ namespace CubicleWarsLibrary
 			callback(waiting);
 		}
 
+		protected void SelectAUnitAndCheckDoneWaitingEvent(State currentState, bool isOwned, WaitingFiredDelegate callback) {
+			var unity = Substitute.For<UnityObject>();
+			var conflictResolver = Substitute.For<ConflictResolver>();
+			var unit = new StandardUnit(conflictResolver, unity);
+			var player = Substitute.For<Player>();
+			player.Owns (unit).Returns(isOwned);
+			
+			var stateMachine = new FakeStateMachine() { CurrentState = currentState, CurrentPlayer = player };
+			unit.Observe(stateMachine);
+			
+			bool doneWaiting = false;
+			unit.DoneWaiting += () => doneWaiting = true;
+			
+			stateMachine.FireStateChange();
+			
+			callback(doneWaiting);
+		}
+
 		[Test]
 		public void ItFiresAWaitingEventIfTheCurrentStateIsWaitingForSelectionAndTheCurrentPlayerOwnsThisUnit()
 		{
-			FiringAStateChangeWith(State.WaitingForSelection, true, delegate(bool waiting) {
+			SelectAUnitAndCheckWaitingEvent(State.WaitingForSelection, true, delegate(bool waiting) {
 				Assert.IsTrue (waiting);
 			});
 		}
@@ -119,7 +137,7 @@ namespace CubicleWarsLibrary
 		[Test]
 		public void ItDoesNotFireAWaitingEventIfTheCurrentStateIsWaitingForSelectionAndTheCurrentPlayerDoesntOwnThisUnit()
 		{
-			FiringAStateChangeWith(State.WaitingForSelection, false, delegate(bool waiting) {
+			SelectAUnitAndCheckWaitingEvent(State.WaitingForSelection, false, delegate(bool waiting) {
 				Assert.IsFalse (waiting);
 			});
 		}
@@ -127,8 +145,31 @@ namespace CubicleWarsLibrary
 		[Test]
 		public void ItDoesNotFireAWaitingEventIfTheCurrentStateIsNotWaitingForSelection() 
 		{
-			FiringAStateChangeWith(State.ResolvingAttack, true, delegate(bool waiting) {
+			SelectAUnitAndCheckWaitingEvent(State.ResolvingAttack, true, delegate(bool waiting) {
 				Assert.IsFalse (waiting);
+			});
+		}
+
+		[Test]
+		public void ItFiresAttackingWhenTheSelectedUnitIsAttacking() {
+			SelectAUnitAndCheckDoneWaitingEvent(State.Attacking, true, delegate(bool doneWaiting) {
+				Assert.IsTrue (doneWaiting);
+			});
+		}
+
+		[Test]
+		public void ItDoesntFireAttackingWhenTheCurrentStateIsNotAttacking()
+		{
+			SelectAUnitAndCheckDoneWaitingEvent(State.Selecting, true, delegate(bool doneWaiting) {
+				Assert.IsFalse (doneWaiting);
+			});
+		}
+
+		[Test]
+		public void ItDoesntFireAttackingWhenTheUnitIsNotTheCurrentOne() 
+		{
+			SelectAUnitAndCheckDoneWaitingEvent(State.Attacking, false, delegate(bool doneWaiting) {
+				Assert.IsFalse (doneWaiting);
 			});
 		}
 	}

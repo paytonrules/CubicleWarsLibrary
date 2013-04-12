@@ -10,6 +10,7 @@ namespace CubicleWarsLibrary
 		public string UnitName { get; set; } 
 		public event AttackedEvent Attacked;
 		public event WaitingEvent Waiting;
+		public event DoneWaitingEvent DoneWaiting;
 		protected ConflictResolver Resolver { get; set; }
 
 		public StandardUnit(ConflictResolver resolver, UnityObject unity)
@@ -39,10 +40,19 @@ namespace CubicleWarsLibrary
 		public void Observe(StateMachine stateMachine)
 		{
 			stateMachine.StateChanged += delegate(object sender, EventArgs e) {
-				if (Waiting != null 
-				    && stateMachine.CurrentPlayer.Owns (this)
-				    && stateMachine.CurrentState == State.WaitingForSelection) {
-					Waiting();
+				if (stateMachine.CurrentPlayer.Owns (this) )
+				{
+					if (Waiting != null 
+					    && stateMachine.CurrentState == State.WaitingForSelection) 
+					{
+						Waiting();
+					}
+
+					if (DoneWaiting != null
+					    && stateMachine.CurrentState == State.Attacking)
+					{
+						DoneWaiting();
+					}
 				}
 			};
 		}
