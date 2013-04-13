@@ -54,5 +54,44 @@ namespace CubicleWarsLibrary
 			
 			Assert.AreEqual(1, player.LivingUnits());
 		}
+
+		[Test]
+		public void ItTellsAllItsUnitsToWaitForACommand()
+		{
+			var unit = Substitute.For<Unit>();
+			var unitTwo = Substitute.For<Unit>();
+
+			var player = new HumanPlayer(new Unit[] {unit, unitTwo});
+			player.WaitForCommand();
+
+			unit.Received().PickMe();
+			unitTwo.Received().PickMe();
+		}
+
+		[Test]
+		public void ItTellsAllItsUnitsToStopWaiting()
+		{
+			var unit = Substitute.For<Unit>();
+			var unitTwo = Substitute.For<Unit>();
+			
+			var player = new HumanPlayer(new Unit[] {unit, unitTwo});
+			player.StopWaitingForCommand();
+			
+			unit.Received().NotReadyForCommand();
+			unitTwo.Received().NotReadyForCommand();
+		}
+
+		[Test]
+		public void ItTellsAllItsUnitsToWaitForAttack()
+		{
+			var unit = Substitute.For<Unit>();
+			var unitTwo = Substitute.For<Unit>();
+			
+			var player = new HumanPlayer(new Unit[] {unit, unitTwo});
+			player.WaitForAttack();
+			
+			unit.Received().PickMe();
+			unitTwo.Received().PickMe();
+		}
 	}
 }

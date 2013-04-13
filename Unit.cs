@@ -11,7 +11,8 @@ namespace CubicleWarsLibrary
 		bool Alive();
 		int AttackStrengthAgainst(Unit enemy);
 		string UnitName { get; }
-		void Observe(StateMachine stateMachine);
+		void PickMe();
+		void NotReadyForCommand();
 
 		event WaitingEvent Waiting;
 		event DoneWaitingEvent DoneWaiting;

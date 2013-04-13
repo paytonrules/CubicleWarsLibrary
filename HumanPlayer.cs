@@ -34,5 +34,27 @@ namespace CubicleWarsLibrary
 		{
 			return units.Count(unit => unit.Alive());
 		}
+
+		public void WaitForCommand()
+		{
+			foreach(var unit in units) {
+				unit.PickMe();
+			}
+		}
+
+		public void StopWaitingForCommand ()
+		{
+			foreach(var unit in units) {
+				unit.NotReadyForCommand();
+			}
+		}
+
+		public void WaitForAttack()
+		{
+			foreach(var unit in units) {
+				unit.PickMe();
+			}
+		}
+
 	}
 }

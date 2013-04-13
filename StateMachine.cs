@@ -22,8 +22,6 @@ namespace CubicleWarsLibrary
 
 	public interface StateMachine
 	{
-		event StateChangedEventHandler StateChanged;
-
 		State CurrentState { get; }
 		Player CurrentPlayer { get; } 
 	}

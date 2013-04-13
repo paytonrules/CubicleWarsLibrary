@@ -8,6 +8,8 @@ namespace CubicleWarsLibrary
 		bool Owns(Unit unit);
 		Unit Weapon();
 		int LivingUnits();
+		void WaitForCommand();
+		void StopWaitingForCommand();
+		void WaitForAttack();
 	}
 }
-

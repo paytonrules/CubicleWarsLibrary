@@ -75,6 +75,56 @@ namespace CubicleWarsLibrary
 			Assert.IsTrue(attacked);
 		}
 
+		[Test]
+		public void ItFiresWaitingForPickMe()
+		{
+			var unity = Substitute.For<UnityObject>();
+			var conflictResolver = Substitute.For<ConflictResolver>();
+			var unit = new StandardUnit(conflictResolver, unity);
+
+			bool waiting = false;
+			unit.Waiting += () => waiting = true;
+
+			unit.PickMe();
+			
+			Assert.IsTrue(waiting);
+		}
+
+		[Test]
+		public void ItDoesntCrashIfNobodyIsWaiting()
+		{
+			var unity = Substitute.For<UnityObject>();
+			var conflictResolver = Substitute.For<ConflictResolver>();
+			var unit = new StandardUnit(conflictResolver, unity);
+			
+			unit.PickMe();
+		}
+
+		[Test]
+		public void ItFiresDoneWaitingWhenNotReadyForACommand()
+		{
+			var unity = Substitute.For<UnityObject>();
+			var conflictResolver = Substitute.For<ConflictResolver>();
+			var unit = new StandardUnit(conflictResolver, unity);
+			
+			bool doneWaiting = false;
+			unit.DoneWaiting += () => doneWaiting = true;
+			
+			unit.NotReadyForCommand();
+			
+			Assert.IsTrue(doneWaiting);
+		}
+
+		[Test]
+		public void ItDoesntCrashIfNobodyIsListeningForDoneWaiting()
+		{
+			var unity = Substitute.For<UnityObject>();
+			var conflictResolver = Substitute.For<ConflictResolver>();
+			var unit = new StandardUnit(conflictResolver, unity);
+			
+			unit.NotReadyForCommand();
+		}
+
 		class FakeStateMachine : StateMachine {
 			public event StateChangedEventHandler StateChanged;
 			public State CurrentState { get; set; }
@@ -86,7 +136,7 @@ namespace CubicleWarsLibrary
 			public void FireStateChange() {
 				StateChanged(this, EventArgs.Empty);
 			}
-		}
+		}/*
 
 		protected delegate void WaitingFiredDelegate(bool waiting);
 
@@ -171,7 +221,7 @@ namespace CubicleWarsLibrary
 			SelectAUnitAndCheckDoneWaitingEvent(State.Attacking, false, delegate(bool doneWaiting) {
 				Assert.IsFalse (doneWaiting);
 			});
-		}
+		}*/
 	}
 }
 

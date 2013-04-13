@@ -22,7 +22,14 @@ namespace CubicleWarsLibrary
 				return players[0]; 
 			}
 		}
-		public event StateChangedEventHandler StateChanged;
+
+		public Player Opponent
+		{
+			get
+			{
+				return players[1];
+			}
+		}
 
 		protected StateMachine<State, Trigger> machine;
 		protected StateMachine<State, Trigger>.TriggerWithParameters<Unit> clickWeapon;
@@ -44,6 +51,7 @@ namespace CubicleWarsLibrary
 				.Permit(Trigger.InvalidSelection, State.WaitingForSelection);
 
 			machine.Configure (State.Attacking)
+				.OnEntry(SwapWaitingUnit)
 				.Permit(Trigger.ClickWeapon, State.ResolvingAttack);
 
 			machine.Configure (State.ResolvingAttack)
@@ -52,14 +60,14 @@ namespace CubicleWarsLibrary
 				.Permit (Trigger.NextTurn, State.WaitingForSelection)
 				.Permit (Trigger.AssignWeapon, State.Attacking)
 				.OnExit(() => SwitchPlayers());
+
+			CurrentPlayer.WaitForCommand();
 		}
 
 		// Probably could be a weapon, not a unit
 		public void Select (Unit unit)
 		{
 			machine.Fire(clickWeapon, unit);
-			if (StateChanged != null)
-				StateChanged(this, new EventArgs());
 		}
 
 		private void TryToSelectWeapon(Unit weapon)
@@ -73,6 +81,12 @@ namespace CubicleWarsLibrary
 			{
 				machine.Fire(Trigger.InvalidSelection);
 			}
+		}
+
+		private void SwapWaitingUnit()
+		{
+			CurrentPlayer.StopWaitingForCommand();
+			Opponent.WaitForAttack();
 		}
 
 		private void SwitchPlayers()

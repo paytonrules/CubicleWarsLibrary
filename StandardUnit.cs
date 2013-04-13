@@ -7,7 +7,7 @@ namespace CubicleWarsLibrary
 	public class StandardUnit : Unit
 	{
 		public int Health { get; protected set; }
-		public string UnitName { get; set; } 
+		public string UnitName { get; set; }
 		public event AttackedEvent Attacked;
 		public event WaitingEvent Waiting;
 		public event DoneWaitingEvent DoneWaiting;
@@ -37,24 +37,16 @@ namespace CubicleWarsLibrary
 			return Resolver.Resolve(enemy, this);
 		}
 
-		public void Observe(StateMachine stateMachine)
+		public void NotReadyForCommand ()
 		{
-			stateMachine.StateChanged += delegate(object sender, EventArgs e) {
-				if (stateMachine.CurrentPlayer.Owns (this) )
-				{
-					if (Waiting != null 
-					    && stateMachine.CurrentState == State.WaitingForSelection) 
-					{
-						Waiting();
-					}
-
-					if (DoneWaiting != null
-					    && stateMachine.CurrentState == State.Attacking)
-					{
-						DoneWaiting();
-					}
-				}
-			};
+			if (DoneWaiting != null)
+				DoneWaiting();
+		}
+		
+		public void PickMe ()
+		{
+			if (Waiting != null)
+				Waiting();
 		}
 	}
 }

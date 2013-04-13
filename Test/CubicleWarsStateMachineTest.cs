@@ -24,7 +24,13 @@ namespace CubicleWarsLibrary
 		{
 			Assert.AreEqual(playerOne, stateMachine.CurrentPlayer);
 		}
-		
+
+		[Test] 
+		public void ItInformsPlayerOneItIsWaitingOnStartup()
+		{
+			playerOne.Received().WaitForCommand();
+		}
+
 		[Test]
 		public void ItAssignsTheSelectedObjectToThePlayerOnSelect()
 		{
@@ -34,6 +40,28 @@ namespace CubicleWarsLibrary
 			stateMachine.Select(unit);
 			
 			playerOne.Received().SetWeapon(unit);
+		}
+
+		[Test]
+		public void ItStopsWaitingForCommandWhenTheCurrentPlayerUnitIsSelected()
+		{
+			var unit = Substitute.For<Unit>();
+			playerOne.Owns (unit).Returns (true);
+
+			stateMachine.Select (unit);
+
+			playerOne.Received().StopWaitingForCommand();
+		}
+
+		[Test]
+		public void ItMakesTheOpponentWaitForAttackOnTransitionToAttack()
+		{
+			var unit = Substitute.For<Unit>();
+			playerOne.Owns (unit).Returns (true);
+			
+			stateMachine.Select (unit);
+			
+			playerTwo.Received().WaitForAttack();
 		}
 
 		[Test]
@@ -140,20 +168,6 @@ namespace CubicleWarsLibrary
 			stateMachine.Select(enemyUnit);
 
 			Assert.AreEqual(State.PlayerWins, stateMachine.CurrentState);
-		}
-
-		[Test]
-		public void ItNotifiesOnTheStateChangeForSelecting()
-		{
-			object stateChanged = null;
-			var unit = Substitute.For<Unit>();
-			playerOne.Owns(unit).Returns(true);
-
-			stateMachine.StateChanged += (s, e) => stateChanged = s;
-
-			stateMachine.Select(unit);
-
-			Assert.IsNotNull(stateChanged);
 		}
 	}
 }
