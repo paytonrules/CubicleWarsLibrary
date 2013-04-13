@@ -59,9 +59,13 @@
     <Compile Include="Test\RockPaperScissorsConflictResolverTest.cs" />
     <Compile Include="RockPaperScissorsConflictResolver.cs" />
     <Compile Include="StateMachine.cs" />
+    <Compile Include="Effects\SineWave.cs" />
+    <Compile Include="Test\Effects\SineWaveTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Test\" />
+    <Folder Include="Effects\" />
+    <Folder Include="Test\Effects\" />
   </ItemGroup>
 </Project>

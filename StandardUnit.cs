@@ -17,6 +17,7 @@ namespace CubicleWarsLibrary
 		{
 			Resolver = resolver;
 			Health = unity.Health;
+			UnitName = unity.Name;
 		}
 
 		public void AttackWith (Unit enemy)
