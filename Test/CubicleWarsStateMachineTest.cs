@@ -14,7 +14,9 @@ namespace CubicleWarsLibrary
 		[SetUp]
 		public void BeforeEach() {
 			playerOne = Substitute.For<Player>();
+			playerOne.Name.Returns("PlayerOne");
 			playerTwo = Substitute.For<Player>();
+			playerTwo.Name.Returns("PlayerTwo");
 			
 			stateMachine = new CubicleWarsStateMachine(playerOne, playerTwo);
 		}
@@ -29,6 +31,32 @@ namespace CubicleWarsLibrary
 		public void ItInformsPlayerOneItIsWaitingOnStartup()
 		{
 			playerOne.Received().WaitForCommand();
+		}
+
+		[Test]
+		public void ItAllowsAddingAUnitToAPlayer()
+		{
+			var unit = Substitute.For<Unit>();
+
+			stateMachine.AddUnitToPlayer("PlayerOne", unit);
+			stateMachine.AddUnitToPlayer("PlayerTwo", unit);
+
+			playerOne.Received().AddUnit(unit);
+			playerTwo.Received().AddUnit(unit);
+		}
+
+		[Test]
+		public void ItGivesAUsefulErrorMessageIfThePlayerDoesntExist()
+		{
+			var unit = Substitute.For<Unit>();
+
+			try {
+				stateMachine.AddUnitToPlayer("Not a Player", unit);
+				Assert.Fail ("Did not throw an expected exception");
+			}
+			catch (Exception e) {
+				Assert.IsInstanceOfType(typeof(InvalidPlayer), e);
+			}
 		}
 
 		[Test]

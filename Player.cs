@@ -11,5 +11,7 @@ namespace CubicleWarsLibrary
 		void WaitForCommand();
 		void StopWaitingForCommand();
 		void WaitForAttack();
+		void AddUnit (Unit unit);
+		String Name{ get; }
 	}
 }

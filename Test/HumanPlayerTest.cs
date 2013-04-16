@@ -9,13 +9,14 @@ namespace CubicleWarsLibrary
 	public class HumanPlayerTest
 	{
 		[Test]
-		public void ItIsCreatedWithItsUnits()
+		public void ItIsCreatedWithItsUnitsAndAName()
 		{
 			var unit = Substitute.For<Unit>();
 
-			var player = new HumanPlayer(new Unit[] {unit});
+			var player = new HumanPlayer("PlayerOne", new Unit[] {unit});
 
-			Assert.IsTrue (player.Owns(unit));
+			Assert.IsTrue(player.Owns(unit));
+			Assert.AreEqual("PlayerOne", player.Name);
 		}
 
 		[Test]
@@ -23,7 +24,7 @@ namespace CubicleWarsLibrary
 		{
 			var unit = Substitute.For<Unit>();
 			
-			var player = new HumanPlayer(new Unit[] {unit});
+			var player = new HumanPlayer("", new Unit[] {unit});
 			player.SetWeapon(unit);
 
 			Assert.AreEqual(unit, player.Weapon());
@@ -37,7 +38,7 @@ namespace CubicleWarsLibrary
 			unit.Alive().Returns(true);
 			unitTwo.Alive().Returns(true);
 
-			var player = new HumanPlayer(new Unit[] {unit, unitTwo});
+			var player = new HumanPlayer("", new Unit[] {unit, unitTwo});
 
 			Assert.AreEqual(2, player.LivingUnits());
 		}
@@ -50,7 +51,7 @@ namespace CubicleWarsLibrary
 			unit.Alive().Returns(true);
 			unitTwo.Alive().Returns(false);
 			
-			var player = new HumanPlayer(new Unit[] {unit, unitTwo});
+			var player = new HumanPlayer("", new Unit[] {unit, unitTwo});
 			
 			Assert.AreEqual(1, player.LivingUnits());
 		}
@@ -61,7 +62,7 @@ namespace CubicleWarsLibrary
 			var unit = Substitute.For<Unit>();
 			var unitTwo = Substitute.For<Unit>();
 
-			var player = new HumanPlayer(new Unit[] {unit, unitTwo});
+			var player = new HumanPlayer("", new Unit[] {unit, unitTwo});
 			player.WaitForCommand();
 
 			unit.Received().PickMe();
@@ -74,7 +75,7 @@ namespace CubicleWarsLibrary
 			var unit = Substitute.For<Unit>();
 			var unitTwo = Substitute.For<Unit>();
 			
-			var player = new HumanPlayer(new Unit[] {unit, unitTwo});
+			var player = new HumanPlayer("", new Unit[] {unit, unitTwo});
 			player.StopWaitingForCommand();
 			
 			unit.Received().NotReadyForCommand();
@@ -87,11 +88,23 @@ namespace CubicleWarsLibrary
 			var unit = Substitute.For<Unit>();
 			var unitTwo = Substitute.For<Unit>();
 			
-			var player = new HumanPlayer(new Unit[] {unit, unitTwo});
+			var player = new HumanPlayer("", new Unit[] {unit, unitTwo});
 			player.WaitForAttack();
 			
 			unit.Received().PickMe();
 			unitTwo.Received().PickMe();
+		}
+
+		[Test]
+		public void ItAllowsAddingAUnit()
+		{
+			var unit = Substitute.For<Unit>();
+
+			var player = new HumanPlayer("", new Unit[] {});
+
+			player.AddUnit(unit);
+
+			Assert.IsTrue (player.Owns(unit));
 		}
 	}
 }

@@ -1,10 +1,18 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using Stateless;
 
 namespace CubicleWarsLibrary
 {
+	public class InvalidPlayer : Exception
+	{
+		public InvalidPlayer(String message) : base(message)
+		{
+		}
+	}
+
 	public class CubicleWarsStateMachine : StateMachine
 	{
 		public State CurrentState 
@@ -68,6 +76,15 @@ namespace CubicleWarsLibrary
 		public void Select (Unit unit)
 		{
 			machine.Fire(clickWeapon, unit);
+		}
+
+		public void AddUnitToPlayer(string playerName, Unit unit)
+		{
+			var player = players.SingleOrDefault(p => p.Name == playerName);
+			if (player == null)
+				throw new InvalidPlayer("The Player Name was not found in the game");
+
+			player.AddUnit(unit);
 		}
 
 		private void TryToSelectWeapon(Unit weapon)

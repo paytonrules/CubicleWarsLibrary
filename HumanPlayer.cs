@@ -10,10 +10,13 @@ namespace CubicleWarsLibrary
 		IList<Unit> units;
 		Unit currentWeapon;
 
-		public HumanPlayer(IEnumerable<Unit> units)
+		public HumanPlayer(String name, IEnumerable<Unit> units)
 		{
 			this.units = new List<Unit>(units);
+			this.Name = name;
 		}
+
+		public string Name { get; protected set; }
 
 		public void SetWeapon(Unit unit)
 		{
@@ -56,5 +59,9 @@ namespace CubicleWarsLibrary
 			}
 		}
 
+		public void AddUnit (Unit unit)
+		{
+			units.Add (unit);
+		}
 	}
 }
