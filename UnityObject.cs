@@ -4,7 +4,7 @@ namespace CubicleWarsLibrary
 {
 	public interface UnityObject
 	{
-		int Health { get; }
+		int InitialHealth { get; }
 		String Name { get; }
 	}
 }

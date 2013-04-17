@@ -30,7 +30,7 @@ namespace CubicleWarsLibrary
 		public void ItLosesTheDamageBasedOnTheUnits()
 		{
 			var unit = Substitute.For<Unit>();
-			unity.Health.Returns(10);
+			unity.InitialHealth.Returns(10);
 			var cellPhone = new StandardUnit(conflictResolver, unity);
 			
 			unit.AttackStrengthAgainst(cellPhone).Returns(1);
@@ -43,7 +43,7 @@ namespace CubicleWarsLibrary
 		[Test]
 		public void ItIsAliveWhenItsHealthIsNotZero ()
 		{
-			unity.Health.Returns(10);
+			unity.InitialHealth.Returns(10);
 			var cellPhone = new StandardUnit(conflictResolver, unity);
 			
 			Assert.IsTrue (cellPhone.Alive ());
@@ -52,7 +52,7 @@ namespace CubicleWarsLibrary
 		[Test]
 		public void ItIsDeadWhenItsHealthIsZero ()
 		{
-			unity.Health.Returns (0);
+			unity.InitialHealth.Returns (0);
 			var cellPhone = new StandardUnit(conflictResolver, unity);
 			
 			Assert.IsFalse (cellPhone.Alive ());
@@ -135,4 +135,3 @@ namespace CubicleWarsLibrary
 		}
 	}
 }
-

@@ -2,7 +2,6 @@ using System;
 
 namespace CubicleWarsLibrary
 {
-	public delegate void AttackedEvent();
 
 	public class StandardUnit : Unit
 	{
@@ -16,7 +15,7 @@ namespace CubicleWarsLibrary
 		public StandardUnit(ConflictResolver resolver, UnityObject unity)
 		{
 			Resolver = resolver;
-			Health = unity.Health;
+			Health = unity.InitialHealth;
 			UnitName = unity.Name;
 		}
 
