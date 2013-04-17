@@ -13,6 +13,7 @@ namespace CubicleWarsLibrary
 		string UnitName { get; }
 		void PickMe();
 		void NotReadyForCommand();
+		int Health { get; }
 
 		event WaitingEvent Waiting;
 		event DoneWaitingEvent DoneWaiting;
