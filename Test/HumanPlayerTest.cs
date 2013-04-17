@@ -100,7 +100,7 @@ namespace CubicleWarsLibrary
 		{
 			var unit = Substitute.For<Unit>();
 
-			var player = new HumanPlayer("", new Unit[] {});
+			var player = new HumanPlayer("");
 
 			player.AddUnit(unit);
 

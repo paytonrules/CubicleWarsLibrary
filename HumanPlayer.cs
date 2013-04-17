@@ -16,6 +16,10 @@ namespace CubicleWarsLibrary
 			this.Name = name;
 		}
 
+		public HumanPlayer(String name) : this(name, new Unit[] {})
+		{
+		}
+
 		public string Name { get; protected set; }
 
 		public void SetWeapon(Unit unit)

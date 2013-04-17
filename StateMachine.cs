@@ -24,6 +24,8 @@ namespace CubicleWarsLibrary
 	{
 		State CurrentState { get; }
 		Player CurrentPlayer { get; } 
+		void AddUnitToPlayer(String playerName, Unit unit);
+		void Select(Unit unit);
 	}
 }
 
