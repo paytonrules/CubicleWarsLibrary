@@ -46,6 +46,42 @@ namespace CubicleWarsLibrary
 		}
 
 		[Test]
+		public void ItRemindsThePlayerItIsWaitingIfItIsWaitingForCommand()
+		{
+			var unit = Substitute.For<Unit>();
+			stateMachine.AddUnitToPlayer("PlayerOne", unit);
+
+			playerOne.Received(2).WaitForCommand();
+		}
+
+		[Test]
+		public void ItDoesNotInformPlayerIfItIsntTheCurrentOne()
+		{
+			var unit = Substitute.For<Unit>();
+			stateMachine.AddUnitToPlayer("PlayerTwo", unit);
+			
+			playerTwo.DidNotReceive().WaitForCommand();
+		}
+
+		[Test]
+		public void ItDoesNotAllowAddingUnitsIfWeAreNotWaitingForACommand()
+		{
+			var unit = Substitute.For<Unit>();
+			var playersCurrentUnit = Substitute.For<Unit>();
+			playerOne.Owns(playersCurrentUnit).Returns (true);
+
+			stateMachine.Select(playersCurrentUnit);
+
+			try {
+				stateMachine.AddUnitToPlayer("PlayerTwo", unit);
+				Assert.Fail ("This did not fail when it should");
+			} catch (Exception e) {
+				Assert.IsInstanceOfType(typeof(InvalidOperationException), e);
+			}
+
+		}
+
+		[Test]
 		public void ItGivesAUsefulErrorMessageIfThePlayerDoesntExist()
 		{
 			var unit = Substitute.For<Unit>();

@@ -41,6 +41,7 @@ namespace CubicleWarsLibrary
 
 		protected StateMachine<State, Trigger> machine;
 		protected StateMachine<State, Trigger>.TriggerWithParameters<Unit> clickWeapon;
+		protected StateMachine<State, Trigger>.TriggerWithParameters<Player, Unit> addUnit;
 		protected List<Player> players;
 
 		public CubicleWarsStateMachine(Player playerOne, Player playerTwo)
@@ -49,9 +50,15 @@ namespace CubicleWarsLibrary
 
 			machine = new StateMachine<State, Trigger>(State.WaitingForSelection);
 			clickWeapon = machine.SetTriggerParameters<Unit>(Trigger.ClickWeapon);
+			addUnit = machine.SetTriggerParameters<Player, Unit>(Trigger.AddUnit);
 
 			machine.Configure(State.WaitingForSelection)
-				.Permit(Trigger.ClickWeapon, State.Selecting);
+				.Permit(Trigger.ClickWeapon, State.Selecting)
+				.Permit(Trigger.AddUnit, State.AddingUnit); 
+
+			machine.Configure (State.AddingUnit)
+				.OnEntryFrom(addUnit, (player, unit) => AddUnit(player, unit))
+				.Permit(Trigger.AddedUnit, State.WaitingForSelection);
 
 			machine.Configure(State.Selecting)
 				.OnEntryFrom(clickWeapon, unit => TryToSelectWeapon(unit))
@@ -84,7 +91,17 @@ namespace CubicleWarsLibrary
 			if (player == null)
 				throw new InvalidPlayer("The Player Name was not found in the game");
 
+			machine.Fire(addUnit, player, unit);
+		}
+
+		private void AddUnit(Player player, Unit unit)
+		{
 			player.AddUnit(unit);
+			if (player == CurrentPlayer) {
+				player.WaitForCommand();
+			}
+
+			machine.Fire (Trigger.AddedUnit);
 		}
 
 		private void TryToSelectWeapon(Unit weapon)

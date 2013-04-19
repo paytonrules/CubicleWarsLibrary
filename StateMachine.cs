@@ -5,6 +5,7 @@ namespace CubicleWarsLibrary
 	public delegate void StateChangedEventHandler(object sender, EventArgs e);
 
 	public enum State {
+		AddingUnit,
 		WaitingForSelection,
 		Selecting,
 		Attacking,
@@ -13,6 +14,8 @@ namespace CubicleWarsLibrary
 	};
 	
 	public enum Trigger {
+		AddUnit,
+		AddedUnit,
 		ClickWeapon,
 		AssignWeapon,
 		PlayerDead,
