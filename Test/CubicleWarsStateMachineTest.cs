@@ -233,6 +233,49 @@ namespace CubicleWarsLibrary
 
 			Assert.AreEqual(State.PlayerWins, stateMachine.CurrentState);
 		}
+
+		[Test]
+		public void AfterPlayerOneWinsTheEventIsFiredCorrectly()
+		{
+			var unit = Substitute.For<Unit>();
+			var enemyUnit = Substitute.For<Unit>();
+			playerOne.Owns(unit).Returns(true);
+			playerTwo.Owns(enemyUnit).Returns(true);
+			playerTwo.LivingUnits().Returns(0);
+
+			String winner = null;
+			stateMachine.GameOver += delegate(string theWinner) {
+				winner = theWinner;
+			};
+			
+			stateMachine.Select(unit);
+			stateMachine.Select(enemyUnit);
+
+			Assert.AreEqual("PlayerOne", winner);
+		}
+
+		[Test]
+		public void AfterPlayerTwoWinsTheEventIsFiredCorrectly()
+		{
+			var unit = Substitute.For<Unit>();
+			var enemyUnit = Substitute.For<Unit>();
+			playerOne.Owns(unit).Returns(true);
+			playerTwo.Owns(enemyUnit).Returns(true);
+			playerTwo.LivingUnits().Returns(3);
+			playerOne.LivingUnits().Returns(0);
+			
+			String winner = null;
+			stateMachine.GameOver += delegate(string theWinner) {
+				winner = theWinner;
+			};
+			
+			stateMachine.Select(unit);
+			stateMachine.Select(enemyUnit);
+			stateMachine.Select(enemyUnit);
+			stateMachine.Select(unit);
+			
+			Assert.AreEqual("PlayerTwo", winner);
+		}
 	}
 }
 

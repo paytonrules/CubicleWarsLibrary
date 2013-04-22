@@ -2,7 +2,7 @@ using System;
 
 namespace CubicleWarsLibrary
 {
-	public delegate void StateChangedEventHandler(object sender, EventArgs e);
+	public delegate void GameOverEvent(String winner);
 
 	public enum State {
 		AddingUnit,
@@ -29,6 +29,8 @@ namespace CubicleWarsLibrary
 		Player CurrentPlayer { get; } 
 		void AddUnitToPlayer(String playerName, Unit unit);
 		void Select(Unit unit);
+
+		event GameOverEvent GameOver;
 	}
 }
 

@@ -44,6 +44,8 @@ namespace CubicleWarsLibrary
 		protected StateMachine<State, Trigger>.TriggerWithParameters<Player, Unit> addUnit;
 		protected List<Player> players;
 
+		public event GameOverEvent GameOver;
+
 		public CubicleWarsStateMachine(Player playerOne, Player playerTwo)
 		{
 			players = new List<Player> {playerOne, playerTwo};
@@ -53,6 +55,7 @@ namespace CubicleWarsLibrary
 			addUnit = machine.SetTriggerParameters<Player, Unit>(Trigger.AddUnit);
 
 			machine.Configure(State.WaitingForSelection)
+				.OnEntry(() => SwitchPlayers())
 				.Permit(Trigger.ClickWeapon, State.Selecting)
 				.Permit(Trigger.AddUnit, State.AddingUnit); 
 
@@ -73,8 +76,11 @@ namespace CubicleWarsLibrary
 				.OnEntryFrom(clickWeapon, unit => ResolveAttack(unit))
 				.Permit (Trigger.PlayerDead, State.PlayerWins)
 				.Permit (Trigger.NextTurn, State.WaitingForSelection)
-				.Permit (Trigger.AssignWeapon, State.Attacking)
-				.OnExit(() => SwitchPlayers());
+					.Permit (Trigger.AssignWeapon, State.Attacking);
+				//.OnExit(() => SwitchPlayers());
+
+			machine.Configure(State.PlayerWins)
+				.OnEntry(AnnouncePlayerWins);
 
 			CurrentPlayer.WaitForCommand();
 		}
@@ -144,6 +150,12 @@ namespace CubicleWarsLibrary
 				else 
 					machine.Fire (Trigger.NextTurn);
 			}
+		}
+
+		private void AnnouncePlayerWins()
+		{
+			if (GameOver != null)
+				GameOver(CurrentPlayer.Name);
 		}
 	}
 }
