@@ -276,6 +276,18 @@ namespace CubicleWarsLibrary
 			
 			Assert.AreEqual("PlayerTwo", winner);
 		}
+
+		[Test]
+		public void ItDoesNotSwitchTheCurrentPlayerAfterAddingAUnit()
+		{
+			var unit = Substitute.For<Unit>();
+
+			Assert.AreEqual("PlayerOne", stateMachine.CurrentPlayer.Name);
+
+			stateMachine.AddUnitToPlayer("PlayerOne", unit);
+
+			Assert.AreEqual("PlayerOne", stateMachine.CurrentPlayer.Name);
+		}
 	}
 }
 

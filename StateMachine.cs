@@ -10,7 +10,8 @@ namespace CubicleWarsLibrary
 		Selecting,
 		Attacking,
 		PlayerWins,
-		ResolvingAttack
+		ResolvingAttack,
+		SwitchingPlayers
 	};
 	
 	public enum Trigger {
@@ -20,6 +21,7 @@ namespace CubicleWarsLibrary
 		AssignWeapon,
 		PlayerDead,
 		NextTurn,
+		SwitchedPlayers,
 		InvalidSelection
 	};
 

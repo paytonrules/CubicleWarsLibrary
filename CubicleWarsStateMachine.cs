@@ -55,7 +55,6 @@ namespace CubicleWarsLibrary
 			addUnit = machine.SetTriggerParameters<Player, Unit>(Trigger.AddUnit);
 
 			machine.Configure(State.WaitingForSelection)
-				.OnEntry(() => SwitchPlayers())
 				.Permit(Trigger.ClickWeapon, State.Selecting)
 				.Permit(Trigger.AddUnit, State.AddingUnit); 
 
@@ -75,9 +74,12 @@ namespace CubicleWarsLibrary
 			machine.Configure (State.ResolvingAttack)
 				.OnEntryFrom(clickWeapon, unit => ResolveAttack(unit))
 				.Permit (Trigger.PlayerDead, State.PlayerWins)
-				.Permit (Trigger.NextTurn, State.WaitingForSelection)
-					.Permit (Trigger.AssignWeapon, State.Attacking);
-				//.OnExit(() => SwitchPlayers());
+				.Permit (Trigger.NextTurn, State.SwitchingPlayers)
+				.Permit (Trigger.AssignWeapon, State.Attacking);
+
+			machine.Configure (State.SwitchingPlayers)
+				.OnEntry(SwitchPlayers)
+				.Permit (Trigger.SwitchedPlayers, State.WaitingForSelection);
 
 			machine.Configure(State.PlayerWins)
 				.OnEntry(AnnouncePlayerWins);
@@ -132,6 +134,7 @@ namespace CubicleWarsLibrary
 		private void SwitchPlayers()
 		{
 			players.Reverse();
+			machine.Fire (Trigger.SwitchedPlayers);
 		}
 
 		private void ResolveAttack(Unit enemy)
