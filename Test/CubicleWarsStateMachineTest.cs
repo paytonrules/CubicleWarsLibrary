@@ -76,7 +76,7 @@ namespace CubicleWarsLibrary
 				stateMachine.AddUnitToPlayer("PlayerTwo", unit);
 				Assert.Fail ("This did not fail when it should");
 			} catch (Exception e) {
-				Assert.IsInstanceOfType(typeof(InvalidOperationException), e);
+				Assert.IsInstanceOf<InvalidOperationException>(e);
 			}
 
 		}
@@ -91,7 +91,7 @@ namespace CubicleWarsLibrary
 				Assert.Fail ("Did not throw an expected exception");
 			}
 			catch (Exception e) {
-				Assert.IsInstanceOfType(typeof(InvalidPlayer), e);
+				Assert.IsInstanceOf<InvalidPlayer>(e);
 			}
 		}
 
