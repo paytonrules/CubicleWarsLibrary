@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CubicleWarsLibrary
 {
@@ -39,7 +38,12 @@ namespace CubicleWarsLibrary
 
 		public int LivingUnits ()
 		{
-			return units.Count(unit => unit.Alive());
+			int count = 0;
+			foreach(var unit in units) {
+				if (unit.Alive())
+					count++;
+			}
+			return count;
 		}
 
 		public void WaitForCommand()
@@ -51,6 +55,7 @@ namespace CubicleWarsLibrary
 
 		public void StopWaitingForCommand ()
 		{
+      		
 			foreach(var unit in units) {
 				unit.NotReadyForCommand();
 			}
