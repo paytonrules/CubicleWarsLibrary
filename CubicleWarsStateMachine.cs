@@ -102,6 +102,12 @@ namespace CubicleWarsLibrary
 			machine.Fire(addUnit, player, unit);
 		}
 
+		public void NewGame ()
+		{
+			throw new NotImplementedException ();
+		}
+
+
 		private void AddUnit(Player player, Unit unit)
 		{
 			player.AddUnit(unit);

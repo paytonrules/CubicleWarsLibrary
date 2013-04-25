@@ -288,6 +288,24 @@ namespace CubicleWarsLibrary
 
 			Assert.AreEqual("PlayerOne", stateMachine.CurrentPlayer.Name);
 		}
+
+		[Test]
+		public void ItAllowsStartingANewGameAfterSomebodyWins()
+		{
+			var unit = Substitute.For<Unit>();
+			var enemyUnit = Substitute.For<Unit>();
+			playerOne.Owns(unit).Returns(true);
+			playerTwo.Owns(enemyUnit).Returns(true);
+			playerTwo.LivingUnits().Returns(3);
+			playerOne.LivingUnits().Returns(0);
+
+			stateMachine.Select(unit);
+			stateMachine.Select(enemyUnit);
+			stateMachine.Select(enemyUnit);
+			stateMachine.Select(unit);
+
+			stateMachine.NewGame();
+		}
 	}
 }
 
