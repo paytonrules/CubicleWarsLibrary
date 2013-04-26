@@ -31,7 +31,6 @@ namespace CubicleWarsLibrary
 		Player CurrentPlayer { get; } 
 		void AddUnitToPlayer(String playerName, Unit unit);
 		void Select(Unit unit);
-		void NewGame();
 
 		event GameOverEvent GameOver;
 	}
