@@ -44,7 +44,7 @@ namespace CubicleWarsLibrary
 		protected StateMachine<State, Trigger>.TriggerWithParameters<Player, Unit> addUnit;
 		protected List<Player> players;
 
-		public event GameOverEvent GameOver;
+		public event GameOverEvent GameOver = delegate { };
 
 		public CubicleWarsStateMachine(Player playerOne, Player playerTwo)
 		{
@@ -157,8 +157,7 @@ namespace CubicleWarsLibrary
 
 		private void AnnouncePlayerWins()
 		{
-			if (GameOver != null)
-				GameOver(CurrentPlayer.Name);
+			GameOver(CurrentPlayer.Name);
 		}
 	}
 }
