@@ -5,6 +5,7 @@ namespace CubicleWarsLibrary
 	public delegate void WaitingEvent();
 	public delegate void DoneWaitingEvent();
 	public delegate void AttackedEvent();
+	public delegate void DeathEvent();
 
 	public interface Unit
 	{
@@ -19,6 +20,7 @@ namespace CubicleWarsLibrary
 		event WaitingEvent Waiting;
 		event DoneWaitingEvent DoneWaiting;
 		event AttackedEvent Attacked;
+		event DeathEvent Dead;
 	}
 }
 

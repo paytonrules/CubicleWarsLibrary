@@ -10,6 +10,8 @@ namespace CubicleWarsLibrary
 		public event AttackedEvent Attacked = delegate {};
 		public event WaitingEvent Waiting = delegate {};
 		public event DoneWaitingEvent DoneWaiting = delegate {};
+		public event DeathEvent Dead = delegate {};
+
 		protected ConflictResolver Resolver { get; set; }
 
 		public StandardUnit(ConflictResolver resolver, UnityObject unity)

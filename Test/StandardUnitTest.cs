@@ -85,6 +85,24 @@ namespace CubicleWarsLibrary
 		}
 
 		[Test]
+		public void ItFiresTheDeadEventWhenItDies()
+		{
+			var unity = Substitute.For<UnityObject>();
+			unity.InitialHealth.Returns(1);
+			var conflictResolver = Substitute.For<ConflictResolver>();
+
+			var unit = new StandardUnit(conflictResolver, unity);
+			conflictResolver.Resolve(unit, unit).Returns(1);
+
+			bool dead = false;
+			unit.Dead += () => dead = true;
+
+			unit.AttackWith(unit);
+
+			Assert.IsTrue (dead);
+		}
+
+		[Test]
 		public void ItFiresWaitingForPickMe()
 		{
 			var unity = Substitute.For<UnityObject>();
