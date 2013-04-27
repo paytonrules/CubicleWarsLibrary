@@ -25,7 +25,8 @@ namespace CubicleWarsLibrary
 		{
 			Health -= enemy.AttackStrengthAgainst (this);
 			Attacked();
-			Dead();
+			if (Health <= 0)
+				Dead();
 		}
 
 		public bool Alive()
