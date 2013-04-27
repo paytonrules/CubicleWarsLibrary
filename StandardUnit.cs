@@ -7,9 +7,9 @@ namespace CubicleWarsLibrary
 	{
 		public int Health { get; protected set; }
 		public string UnitName { get; set; }
-		public event AttackedEvent Attacked;
-		public event WaitingEvent Waiting;
-		public event DoneWaitingEvent DoneWaiting;
+		public event AttackedEvent Attacked = delegate {};
+		public event WaitingEvent Waiting = delegate {};
+		public event DoneWaitingEvent DoneWaiting = delegate {};
 		protected ConflictResolver Resolver { get; set; }
 
 		public StandardUnit(ConflictResolver resolver, UnityObject unity)
@@ -22,9 +22,7 @@ namespace CubicleWarsLibrary
 		public void AttackWith (Unit enemy)
 		{
 			Health -= enemy.AttackStrengthAgainst (this);
-			if (Attacked != null) {
-				Attacked();
-			}
+			Attacked();
 		}
 
 		public bool Alive()
@@ -39,14 +37,12 @@ namespace CubicleWarsLibrary
 
 		public void NotReadyForCommand ()
 		{
-			if (DoneWaiting != null)
-				DoneWaiting();
+			DoneWaiting();
 		}
 		
 		public void PickMe ()
 		{
-			if (Waiting != null)
-				Waiting();
+			Waiting();
 		}
 	}
 }
