@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.0</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7CED966A-8FDD-4D06-A100-5C9CF5B811D1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CubicleWarsWithoutTests</RootNamespace>
+    <AssemblyName>CubicleWarsWithoutTests</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="..\Unit.cs">
+      <Link>Unit.cs</Link>
+    </Compile>
+    <Compile Include="..\ConflictResolver.cs">
+      <Link>ConflictResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\CubicleWarsStateMachine.cs">
+      <Link>CubicleWarsStateMachine.cs</Link>
+    </Compile>
+    <Compile Include="..\HumanPlayer.cs">
+      <Link>HumanPlayer.cs</Link>
+    </Compile>
+    <Compile Include="..\Player.cs">
+      <Link>Player.cs</Link>
+    </Compile>
+    <Compile Include="..\RockPaperScissorsConflictResolver.cs">
+      <Link>RockPaperScissorsConflictResolver.cs</Link>
+    </Compile>
+    <Compile Include="..\StandardUnit.cs">
+      <Link>StandardUnit.cs</Link>
+    </Compile>
+    <Compile Include="..\StateMachine.cs">
+      <Link>StateMachine.cs</Link>
+    </Compile>
+    <Compile Include="..\UnityObject.cs">
+      <Link>UnityObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Effects\SineWave.cs">
+      <Link>SineWave.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\stateless\src\Stateless\Stateless.csproj">
+      <Project>{A15EEC02-60EC-4705-A58B-A6ECD55A9628}</Project>
+      <Name>Stateless</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
